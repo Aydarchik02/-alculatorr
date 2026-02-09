@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Калькулятор</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #1e1e1e;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+      }
+
+      .calculator {
+        background: #2c2c2c;
+        padding: 20px;
+        border-radius: 10px;
+        width: 260px;
+      }
+
+      .display {
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        text-align: right;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        border: none;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      button {
+        height: 50px;
+        font-size: 18px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      .operator {
+        background: #ff9500;
+        color: white;
+      }
+
+      .equal {
+        background: #34c759;
+        color: white;
+        grid-column: span 2;
+      }
+
+      .clear {
+        background: #ff3b30;
+        color: white;
+        grid-column: span 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" id="display" class="display" readonly />
+
+      <div class="buttons">
+        <button class="clear">C</button>
+        <button class="operator">(</button>
+        <button class="operator">)</button>
+
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="operator">/</button>
+
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="operator">*</button>
+
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button class="operator">-</button>
+
+        <button>0</button>
+        <button>.</button>
+        <button class="equal">=</button>
+        <button class="operator">+</button>
+      </div>
+    </div>
+
+    <script>
+      const display = document.getElementById("display");
+      const buttons = document.querySelectorAll("button");
+
+      // 🔹 Работа с событиями (клики)
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => handleInput(button.textContent));
+      });
+
+      function handleInput(value) {
+        if (value === "C") {
+          display.value = "";
+          return;
+        }
+
+        if (value === "=") {
+          calculate();
+          return;
+        }
+
+        display.value += value;
+      }
+
+      // 🔹 Парсинг выражений
+      function calculate() {
+        try {
+          display.value = eval(display.value);
+        } catch {
+          display.value = "Ошибка";
+        }
+      }
+
+      // 🔹 Клавиатурный ввод
+      document.addEventListener("keydown", (event) => {
+        const allowedKeys = "0123456789+-*/().";
+
+        if (allowedKeys.includes(event.key)) {
+          display.value += event.key;
+        }
+
+        if (event.key === "Enter") {
+          calculate();
+        }
+
+        if (event.key === "Backspace") {
+          display.value = display.value.slice(0, -1);
+        }
+
+        if (event.key === "Escape") {
+          display.value = "";
+        }
+      });
+    </script>
+  </body>
+</html>
